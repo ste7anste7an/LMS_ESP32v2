@@ -1,0 +1,12 @@
+[submodule "PUPRemote"]
+	path = PUPRemote
+	url = https://github.com/antonvh/PUPRemote.git
+[submodule "submodules/PUPRemote"]
+	path = submodules/PUPRemote
+	url = https://github.com/antonvh/PUPRemote.git
+[submodule "submodules/UartRemote"]
+	path = submodules/UartRemote
+	url = https://github.com/antonvh/UartRemote.git
+[submodule "submodules/SerialTalk"]
+	path = submodules/SerialTalk
+	url = https://github.com/antonvh/SerialTalk.git
