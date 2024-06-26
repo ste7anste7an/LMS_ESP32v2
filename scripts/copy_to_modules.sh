@@ -1,4 +1,4 @@
-export MICROPYTHON=/home/stefan/projects/esp32/test/micropython
+export MICROPYTHON=/home/stefan/projects/esp32/micropython
 cp -a ../boards/LMS_ESP32 $MICROPYTHON/ports/esp32/boards
 export LMS_ESP32_MODULES=$MICROPYTHON/ports/esp32/boards/LMS_ESP32/modules
 mkdir -p $LMS_ESP32_MODULES
