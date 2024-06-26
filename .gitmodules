@@ -10,3 +10,6 @@
 [submodule "submodules/SerialTalk"]
 	path = submodules/SerialTalk
 	url = https://github.com/antonvh/SerialTalk.git
+[submodule "submodules/mpy-robot-tools"]
+	path = submodules/mpy-robot-tools
+	url = https://github.com/antonvh/mpy-robot-tools.git
