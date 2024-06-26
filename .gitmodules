@@ -13,3 +13,6 @@
 [submodule "submodules/mpy-robot-tools"]
 	path = submodules/mpy-robot-tools
 	url = https://github.com/antonvh/mpy-robot-tools.git
+[submodule "submodules/micropython-ulab"]
+	path = submodules/micropython-ulab
+	url = https://github.com/v923z/micropython-ulab.git
