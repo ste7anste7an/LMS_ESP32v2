@@ -25,7 +25,7 @@ else:
     rx_pin=LMS_ESP32_RX_PIN
     
 baudrate=115200
-uart=UART(1,baudrate=baudrate,rx=rx_pin,tx=tx_pin,timeout=1)
+uart=UART(1,baudrate=baudrate,rx=rx_pin,tx=tx_pin,timeout=1,timeout_char=1)
 
 def print_pins(state):
     #state=[1 if p in states else 0 for p in pins]
@@ -94,13 +94,15 @@ while True:
   start=False
   while not start:
       msg=uart.read()
+      #print("msg=",msg)
+      sleep_ms(20)
       if msg==b'start':
           start=True
           np[0]=(0,0,0)
           np.write()
           Pin(pin_led,Pin.IN)
   
-  uart.write('ack')
+  _=uart.write('ack')
   #print("start testing")
   testing=True
   total_errors=0
@@ -117,10 +119,10 @@ while True:
                 pin=int(r[1:])
                 pin_error,pin_short=test_pin(pin,state=state)
                 total_errors+=pin_error+pin_short
-                uart.write('ack')
+                _=uart.write('ack')
             if r[0]=='I':
                 print("[*] Testing ID %s"%r.split('=')[1])
-                uart.write('ack')
+                _=uart.write('ack')
   if total_errors==0:
      print("[*] Test passed succesfully")
   else:
@@ -140,4 +142,5 @@ while True:
       sleep_ms(1000)
   np[0]=(0,0,0)
   np.write()
-  Pin(pin_led,Pin.IN)
+  _=Pin(pin_led,Pin.IN)
+

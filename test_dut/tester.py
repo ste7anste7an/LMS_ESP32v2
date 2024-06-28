@@ -23,9 +23,9 @@ else:
     pin_led=25
     tx_pin=LMS_ESP32_TX_PIN
     rx_pin=LMS_ESP32_RX_PIN
-    
+
 baudrate=115200
-uart=UART(1,baudrate=baudrate,rx=rx_pin,tx=tx_pin,timeout=1)
+uart=UART(1,baudrate=baudrate,rx=rx_pin,tx=tx_pin,timeout=1,timeout_char=1)
 
 def print_pins(state):
     #state=[1 if p in states else 0 for p in pins]
@@ -34,11 +34,10 @@ def print_pins(state):
     print('[*] '+''.join([" [%1s] "%s for s in state[:8]]))
     print('[*] '+''.join(["GP%02d "%p for p in pins[8:]]))
     print('[*] '+''.join([" [%1s] "%s for s in state[8:]]))
-    
+
 def all_pins_in():
     for p in pins:
         pin = Pin(p, Pin.IN, pull=Pin.PULL_UP)
-        
 
 def test_pin(pin_test,state=1):
     lowhigh=['low','high']
@@ -55,12 +54,10 @@ def test_pin(pin_test,state=1):
     #print("vals",vals)
     pin_error=0
     pins_short=0
-    
     for p in pins:
         if p==pin_test:
             pin_error=not vals[p]==state
             states.append('V' if pin_error==0 else 'X')
-                
         else:
             if not (p==0 and state==1): # GPIO0 is always pull up
                 pin_short=not (vals[p]==1-state)
@@ -75,11 +72,7 @@ def test_pin(pin_test,state=1):
     if pin_error or pins_short>0:
         print()
         print_pins(states)
-        
     return pin_error,pins_short
-
-
-
 
 # wait for start message from DUT
 while True:
@@ -94,13 +87,14 @@ while True:
   start=False
   while not start:
       msg=uart.read()
+      #print("msg=",msg)
+      sleep_ms(20)
       if msg==b'start':
           start=True
           np[0]=(0,0,0)
           np.write()
           Pin(pin_led,Pin.IN)
-  
-  uart.write('ack')
+  _=uart.write('ack')
   #print("start testing")
   testing=True
   total_errors=0
@@ -117,10 +111,10 @@ while True:
                 pin=int(r[1:])
                 pin_error,pin_short=test_pin(pin,state=state)
                 total_errors+=pin_error+pin_short
-                uart.write('ack')
+                _=uart.write('ack')
             if r[0]=='I':
                 print("[*] Testing ID %s"%r.split('=')[1])
-                uart.write('ack')
+                _=uart.write('ack')
   if total_errors==0:
      print("[*] Test passed succesfully")
   else:
@@ -133,11 +127,12 @@ while True:
           sleep_ms(200)
           np[0]=(0,0,0)
           np.write()
-          sleep_ms(200)          
+          sleep_ms(200)
   else:
       np[0]=(0,100,0)
       np.write()
       sleep_ms(1000)
   np[0]=(0,0,0)
   np.write()
-  Pin(pin_led,Pin.IN)
+  _=Pin(pin_led,Pin.IN)
+

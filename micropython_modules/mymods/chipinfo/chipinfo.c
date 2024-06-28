@@ -4,13 +4,17 @@
 #include "soc/rtc_cntl_reg.h"
 #include "soc/efuse_reg.h"
 #include "esp_chip_info.h"
+#include "soc/chip_revision.h"
+#include "hal/efuse_ll.h"
+#include "hal/efuse_hal.h"
 #include <string.h>
 // This is the function which will be called from Python as cexample.add_ints(a, b).
 
 static mp_obj_t get_chip_info() {
 	esp_chip_info_t chip_info;
-	int chip_ver = REG_GET_FIELD(EFUSE_BLK0_RDATA3_REG, EFUSE_RD_CHIP_VER_PKG);
-	int pkg_ver = chip_ver & 0x7;
+	// int chip_ver = REG_GET_FIELD(EFUSE_BLK0_RDATA3_REG, EFUSE_RD_CHIP_VER_PKG);
+	// int pkg_ver = chip_ver & 0x7;
+	int pkg_ver = efuse_ll_get_chip_ver_pkg();
 	char chip_model[20];
 	esp_chip_info(&chip_info);
         switch (pkg_ver) {
