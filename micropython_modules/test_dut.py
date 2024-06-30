@@ -27,7 +27,7 @@ def test_pin(pin,state=1):
     for p in pins:
         pp = Pin(p, Pin.IN, pull=None)
     write_gpio(pin,state)
-    print("testpin",pin,state)
+    #print("testpin",pin,state)
     _=ur.call('test_pin','2b',pin,state)
 
 def write_id():
@@ -44,7 +44,7 @@ def test_program():
         test_pin(p,state=0)
         sleep_ms(10)
     # set pin_led as IN 
-    Pin(pin_led, Pin.IN)
+    _=Pin(pin_led, Pin.IN)
     ur=UartRemote(timeout=3000)
     ur.call('stop')
     

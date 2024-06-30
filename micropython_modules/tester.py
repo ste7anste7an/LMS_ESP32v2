@@ -41,7 +41,7 @@ def all_pins_in():
         
 
 def test_pin(pin_test,state):
-    print("test_pin",pin_test,state)
+    #print("test_pin",pin_test,state)
     global total_errors
     lowhigh=['low','high']
     states=[]
@@ -78,7 +78,7 @@ def test_pin(pin_test,state):
         print()
         print_pins(states)
     total_errors+=pin_error+pins_short
-    print("errors=",total_errors)
+    #print("errors=",total_errors)
    
 
 def print_start():
