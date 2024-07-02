@@ -10,9 +10,9 @@ rm -rf SerialTalk
 
 
 git clone https://github.com/v923z/micropython-ulab.git
-git clone https://github.com/antonvh/mpy-robot-tools.git
+git clone -b frozen-modules-esp32 https://github.com/antonvh/mpy-robot-tools.git
 git clone https://github.com/antonvh/SerialTalk.git
-git clone  https://github.com/antonvh/PUPRemote.git
+git clone https://github.com/antonvh/PUPRemote.git
 git clone https://github.com/antonvh/PyHuskyLens.git
 
 cp -a ../boards/LMS_ESP32 $MICROPYTHON/ports/esp32/boards
