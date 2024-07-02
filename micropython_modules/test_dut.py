@@ -1,6 +1,5 @@
-# DUT
-
 from machine import UART,Pin,unique_id
+from neopixel import NeoPixel
 from time import ticks_ms,ticks_diff
 from binascii import hexlify
 from time import sleep_ms
@@ -8,6 +7,7 @@ import lms_esp32
 from uartremote import *
 
 ur=UartRemote(timeout=1000)
+np=NeoPixel(Pin(25),1)
 
 version=lms_esp32.version()
 if version==2:
@@ -21,7 +21,7 @@ else:
 def write_gpio(pin,val):
     p = Pin(pin, Pin.OUT)
     p.value(val)
-    
+
 def test_pin(pin,state=1):
     # set Pin(pin) high, other float
     for p in pins:
@@ -33,28 +33,37 @@ def test_pin(pin,state=1):
 def write_id():
     id=hexlify(unique_id())
     ur.call('mac','12s',id)
-    
+
 def test_program():
+    np[0]=(20,0,0)
+    np.write()
     print("start test program")
     write_id()
     for p in pins:
         test_pin(p,state=1)
         sleep_ms(10)
+    np[0]=(0,20,0)
+    np.write()
     for p in pins:
         test_pin(p,state=0)
         sleep_ms(10)
-    # set pin_led as IN 
+    # set pin_led as IN
     _=Pin(pin_led, Pin.IN)
+    np[0]=(0,0,20)
+    np.write()
     ur=UartRemote(timeout=3000)
     ur.call('stop')
-    
+    np[0]=(0,0,0)
+    np.write()
+
 def start_test():
   #sleep_ms(200) # wait
+  
   ur=UartRemote(timeout=1000)
   err,_=ur.call('start')
   if err!='err':
       test_program()
   else:
       print('ready to start coding')
- 
+
 
