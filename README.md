@@ -40,7 +40,7 @@ This firmware needs to be flashed only on the Tester Unit (TU): [micropython_lms
 
 ## Connecting TU to TUD
 
-![ESP32 pin out](images/lms_esp32_pinout.jpeg)
+![ESP32 pin out](images/pinout_lms_esp32_v2.jpg)
 
 1) NeoPixel
 
