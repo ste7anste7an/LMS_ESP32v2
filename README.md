@@ -55,8 +55,8 @@ This firmware needs to be flashed only on the Tester Unit (TU): [micropython_lms
 
 |TU GPIO | DUT GPIO | 
 |--------|----------|
-|GPIO18| GPIO19 |
-|GPIO19| GPIO18 |
+|GPIO8 | GPIO7  |
+|GPIO7 | GPIO9 |
 
 3) GPIO
 
@@ -70,10 +70,10 @@ This firmware needs to be flashed only on the Tester Unit (TU): [micropython_lms
 |GPIO13  |GPIO13 |
 |GPIO14  |GPIO14 |
 |GPIO15  |GPIO15 |
+|GPIO19  |GPIO19 |
+|GPIO20  |GPIO20 |
 |GPIO21  |GPIO21 |
 |GPIO22  |GPIO22 |
-|GPIO23  |GPIO23 |
-|GPIO25  |GPIO25 |
 |GPIO26  |GPIO26 |
 |GPIO27  |GPIO27 |
 |GPIO32  |GPIO32 |
