@@ -4,24 +4,24 @@
 
 After production of the LMS-ESP32 board, an acceptance test needs to be performed
  that tests all the GPIO pins for good connection and checks for short circuits with 
-surrounding pins. In each tests, two units are involved: the Tester Unit (TU), and the Device Under Test (DUT). The programm on the TU is run in and endless loop and can serve for testing of multple DUT's.
+surrounding pins. In each tests, two units are involved: the Tester Unit (TU), and the Device Under Test (DUT). The programm on the TU is run in an endless loop and can serve for testing of mulitple DUT's.
 
-The TU is fitted with a NeoPixel LED connected to GPIO32.
+The TU is uses the on board NeoPixel LED connected to GPIO25 to indicate the status of the test.
  The NeoPixel indicates the state of the test.
 - Orange: a new DUT can be inserted
 - Green: 1 second, test succeeded succesfully
 - Red: 5 brief flashes, test failed.
 
-During the test serial output is provided on the Tester unit. Some examples of typical output can be seen [here](#example-output-of-tu).
+The NepoPixel LED of the DUT will flash red, green and blue alternatively during a test. 
+
+Furthermore, during the test serial output is provided on the Tester unit. Some examples of typical output can be seen [here](#example-output-of-tu).
 
 ## Executing the test
-- Flash the same firmware on all devices (both the TU as well as the DUTs). 
+- Flash the Tester unit with the tester firmware
+- Flash all production devices with the default firmware. 
 - Connect a serial monitor (with logging to a file) at 115200 bit/s to the USB of the TU 
-- Wait for the REPL prompt to show and execute this command:
-```
-import tester
-```
-- the following prompt will be visible:
+- Reset the TU device and check that you see the following lines:
+
 ```
 *********************
 * Ready for testing *
@@ -42,23 +42,14 @@ This firmware needs to be flashed only on the Tester Unit (TU): [micropython_lms
 
 ![ESP32 pin out](images/pinout_lms_esp32_v2.jpg)
 
-1) NeoPixel
-
-|TU INMP441 |  NeoPixel|
-|-------|------|
-|SD/GPIO32 | Data |
-| VCC | VCC |
-| GND | GND|
-
-
-2) UART
+1) UART
 
 |TU GPIO | DUT GPIO | 
 |--------|----------|
 |GPIO8 | GPIO7  |
 |GPIO7 | GPIO9 |
 
-3) GPIO
+2) GPIO's
 
 |TU GPIO | DUT GPIO 
 |-------|--------|
@@ -88,9 +79,9 @@ Two Python modules are incorporated as frozen modules in the firmware: `test_dut
 
 The TU and DUT communicate with a UART running in each device on GPIO18 and GPIO19 which are cross connected (GPIO18 of the TU to GPIO19 of the DUT and vice versa).
 
-At boot, the DUT checks for the presence of the tester unit by sending `start`. If it not receives an ack message `ack` from the TU within 1000 ms, it quits the script and shows a REPL promt.
+At boot, the DUT checks for the presence of the tester unit by calling the `start`-function using the UartRemote library. If it not receives an ack message from the TU within 1000 ms, it quits the script and continues normal operation and shows a REPL promt.
 
-If it receives the `ack` message, it enters in testing mode where it perfoms the following actions:
+If it receives an `ack` message, it enters in testing mode where it perfoms the following actions:
 
 2) test all pins high
 
@@ -99,12 +90,11 @@ The DUT loops over al used GPIO pins. In the loop a single pin is set to high wh
 ```
 [!] One or more pins are short circuited (S=short, .=ok, X=not connected, V=ok, 1=always high)
 
-
 [*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
+[*] GP05 GP22 GP20 GP00 GP32 GP26 GP14 GP13 
 [*]  [V]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [S]  [.]  [.]  [1]  [.]  [.]  [.]  [.] 
+[*] GP04 GP21 GP19 GP02 GP33 GP27 GP12 GP15 
+[*]  [S]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
 ```
 
 3) test all pins low
@@ -128,102 +118,3 @@ This shows per DUT the following information (if the test is successful):
 [*] Test passed succesfully
 
 ```
-
-If a test failes, the following information is (typically) shown. In this case, GPIO4 and GPIO5 were not connected:
-```
-*********************
-* Ready for testing *
-* Insert DUT in rig *
-*********************
-[*] Testing ID 4c11ae6464c0
-
-[!] Error when setting pin GP05 high
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [X]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [.]  [.]  [.]  [1]  [.]  [.]  [.]  [.] 
-
-[!] Error when setting pin GP04 high
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [.]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [X]  [.]  [.]  [1]  [.]  [.]  [.]  [.] 
-
-[!] Error when setting pin GP05 low
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [X]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [.]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-
-[!] Error when setting pin GP04 low
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [.]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [X]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-
-[!] Test failed with 4 error(s)
-
-```
-
-In case there is a short circuit of neigboring pins,
- the following output is shown (GPIO4 and GPIO5 are 
-short circuited, hence the 'S' is indicated):
-```
-*********************
-* Ready for testing *
-* Insert DUT in rig *
-*********************
-[*] Testing ID 4c11ae6464c0
-
-[!] Error when setting pin GP05 high
-[!] One or more pins are short circuited (S=short, .=ok, X=not connected, V=ok, 1=always high)
-
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [V]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [S]  [.]  [.]  [1]  [.]  [.]  [.]  [.] 
-
-[!] Error when setting pin GP04 high
-[!] One or more pins are short circuited (S=short, .=ok, X=not connected, V=ok, 1=always high)
-
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [S]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [V]  [.]  [.]  [1]  [.]  [.]  [.]  [.] 
-
-[!] Error when setting pin GP05 low
-[!] One or more pins are short circuited (S=short, .=ok, X=not connected, V=ok, 1=always high)
-
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [V]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [S]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-
-[!] Error when setting pin GP04 low
-[!] One or more pins are short circuited (S=short, .=ok, X=not connected, V=ok, 1=always high)
-
-
-[*] -------------------------------------
-[*] GP05 GP22 GP25 GP02 GP26 GP27 GP32 GP33 
-[*]  [S]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-[*] GP04 GP21 GP23 GP00 GP12 GP13 GP14 GP15 
-[*]  [V]  [.]  [.]  [.]  [.]  [.]  [.]  [.] 
-
-[!] Test failed with 4 error(s)
-
-```
-
