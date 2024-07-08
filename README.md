@@ -47,7 +47,7 @@ This firmware needs to be flashed only on the Tester Unit (TU): [micropython_lms
 |TU GPIO | DUT GPIO | 
 |--------|----------|
 |GPIO8 | GPIO7  |
-|GPIO7 | GPIO9 |
+|GPIO7 | GPIO8 |
 
 2) GPIO's
 
