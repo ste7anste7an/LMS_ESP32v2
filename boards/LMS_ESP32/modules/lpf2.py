@@ -512,7 +512,7 @@ class LPF2(object):
 
         if self.connected:
             self.last_nack = utime.ticks_ms()
-            print(f"\nSuccessfully connected to hub with senor id {self.sensor_id}")
+            print(f"\nSuccessfully connected to hub with sensor id {self.sensor_id}")
             if not fast_uart_hub:
                 self.fast_uart()
         else:
