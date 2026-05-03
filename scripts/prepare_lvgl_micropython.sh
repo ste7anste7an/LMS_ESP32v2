@@ -50,6 +50,9 @@ cp ../micropython_modules/inisetup/inisetup.py $LVGL_MICROPYTHON/micropy_updates
 # manifest for forzen modules
 cp ../micropython_modules/manifest/manifest.py $LVGL_MICROPYTHON
 
+# lv_conf for fonts
+cp ../micropython_modules/lvgl/lv_conf.h $LVGL_MICROPYTHON/lib
+
 cd $LVGL_MICROPYTHON
 #python3 make.py esp32 BOARD=ESP32_GENERIC \
 #DISPLAY=ili9341 DISPLAY=st7789 INDEV=xpt2046 INDEV=cst816s \

@@ -11,7 +11,7 @@ This repo contains scripts to build micropython firmware for LMS-ESP32 modules.
 
 
 ## chipinfo
-This is a native C module that is used to detect the chip version of the ESP32 module. For LMS_ESP32v1 this is 'wrover', for LMS_ESP32v2 this is 'pico'.
+This is a native C module that is used to detect the chip version of the ESP32 module. For LMS_ESP32v1 this is 'wrover', for LMS_ESP32v2 this is 'ESP32-PICO-V3-02 (revision 3)'.
 
 
 ## Frozen modules
